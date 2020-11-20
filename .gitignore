@@ -1,1 +1,11 @@
+# Markdown related files
 *.html
+
+# PDF related files
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.pdf

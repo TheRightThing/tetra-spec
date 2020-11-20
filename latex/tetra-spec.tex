@@ -1,0 +1,28 @@
+\documentclass{article}
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage[margin=1.2 in]{geometry}
+
+\input{latex/macros.tex}
+
+\begin{document}
+\pagenumbering{gobble}
+\input{latex/titlepage.tex}
+\cleardoublepage
+\tableofcontents
+\cleardoublepage
+\pagenumbering{arabic}
+
+% Begin contents
+\input{latex/introduction.tex}
+
+
+% End contents
+
+\cleardoublepage
+% Reactivate once there are any citations.
+%\bibliographystyle{unsrt}
+%\bibliography{latex/ref}
+
+\end{document}
