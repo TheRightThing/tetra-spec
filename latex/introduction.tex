@@ -2,7 +2,7 @@
 \paragraph{Abstract}
 This section tells the reason why the {\tetra} project was started, what it aims to achieve, as well as some basic theoretical foundations that will be needed to appreciate the rest of this document.
 
-\subsection{Motivation and goal}
+\subsection{Motivation and goal\optional}
 
 \paragraph{The state of computing}
 Today's civilisation and digital computations have become inseparable.
@@ -29,3 +29,16 @@ This compatibility will give it the ability to employ the same tools for both ha
 We want to create an excellent tool that does not punish excellent ideas through artificial limitations, so abstractions, transformations, and specialisations are at the core of the framework.
 The {\tetra} computation model must be capable of describing the behaviour of all possible computer program digital circuit designs.
 A computation description language that fully implements {\tetra} will allow the system designer to reason about his design at several abstraction layers, and such analysis will be able to be automatised.
+
+\subsection{Core concepts}
+\paragraph{Nomenclature}
+In the following, for improved readability, we will refer to both \emph{software programs} and \emph{circuit designs} as programs.
+To specifically refer either one, we will use the terms ``software program'' or ``circuit design'', respectively.
+
+\paragraph{Essence}
+At their core, {\tetra} programs are understood as collections of \emph{independent processes} acting on \emph{objects} -- reading, modifying, creating, or destroying them.
+These processes interact with each other by communicating via channels, and synchronising/notifying each other via signals.
+Objects store a value of a specific type.
+Types describe the structured data of objects' values, as well as their behaviour using functions.
+Functions describe computations and actions on objects, and processes refer to active execution instances of functions.
+With these simple ground-rules in place, we can dive deeper into the semantics of \tetra.
