@@ -21,10 +21,10 @@ For any type $T$, nullable pointers are denoted as $T_?$, and non-nullable point
 In digital circuits designs, pointers are not allowed, since they require that all values reside in an addressable memory.
 
 \paragraph{References}
-For any type $T$, a reference is denoted as $T'$.
-A $T'$-object is an alias to another $T$-object, and changes made to one object will also be visible in the other object.
+For any type $T$, a reference is denoted as $\reft T$.
+A $\reft T$-object is an alias to another $T$-object, and changes made to one object will also be visible in the other object.
 A reference object will always stay an alias to the same object.
-Double-references are equivalent to single references ($T''=T'$).
+Double-references are equivalent to single references ($\reft{\reft T}=\reft T$).
 In digital circuits, references are the equivalent of what is commonly known as a \emph{wire}: a direct connection to some module's output.
 In software programs, references are equivalent to pointers (but retain their restrictions).
 
