@@ -2,5 +2,32 @@
 
 \newcommand{\tetra}{{\scshape\sffamily{Tetra}}}
 
-\newcommand{\set}[1]{\left\{\,#1\,\right\}}
 \newcommand{\optional}{\,$*$}
+
+\newcommand{\set}[1]{\left\{\,#1\,\right\}}
+\newcommand{\range}[2]{\left[\,#1,\,#2\,\right]}
+
+
+% cn: code name
+\newcommand{\cn}[1]{\mathtt{#1}}
+\newcommand{\carray}[1]{#1[\,\recurse{}{\,][\,}{\,]}}
+\newcommand{\struct}[0]{\left\langle\,\recurse{}{;~}{\,\right\rangle}}
+\newcommand{\union}[0]{\left(\recurse{}{\,\cup\,}{\right)}}
+\newcommand{\var}[2]{\cn{#1}{\colon}{#2}}
+\newcommand{\memb}[1]{{#1}.\recurse{\cn}{.}{}}
+\newcommand{\bool}[0]{\mathbb{B}}
+\newcommand{\Z}[0]{\mathbb{Z}}
+\newcommand{\N}[0]{\mathbb{N}}
+\newcommand{\nullptr}[0]{\mathsf{null}}
+\newcommand{\true}[0]{\mathsf{true}}
+\newcommand{\false}[0]{\mathsf{false}}
+\newcommand{\cast}[2]{\left(#1 \to \recurse{}{\to}{\right)}{#2}}
+
+
+% Helper macros.
+\makeatletter
+%recurse(fn, delim, end)
+\newcommand{\recurse}[3]{\@ifnextchar\bgroup{\recursegobblearg{#1}{#2}{#3}}{#3}}
+%recursegobblearg(fn, delim, end, fnarg)
+\newcommand{\recursegobblearg}[4]{#1{#4}\@ifnextchar\bgroup{{#2}\recursegobblearg{#1}{#2}{#3}}{#3}}
+\makeatother

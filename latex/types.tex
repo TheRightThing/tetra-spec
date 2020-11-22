@@ -1,0 +1,47 @@
+\section{Types}
+
+\subsection{Native types}
+All of the following types are necessary for some fundamental operations in {\tetra} so that they need to be a fixed part of the framework.
+
+\paragraph{Boolean}
+The boolean type is defined as $\bool = \set{\true, \false}$, where $\true$ means that some expression or condition is true, and $\false$ means that a condition or expression is false.
+Booleans are necessary to evaluate if-else statements and perform related operations.
+
+\paragraph{Integers}
+Any $N$-bit sized integer type is written as $\Z_N = \range{-2^{N-1}}{ 2^{N-1}-1}$ for signed integer types, and $\N_N = \range{0}{2^{N-1}}$ for unsigned integer types.
+Unbounded integer types are simply denoted as $\N$ and $\Z$.
+Integers are necessary to represent array dimensions and similar things.
+During the compile time, unbounded integers exist, but during run-time of a program, all instantiated integers must be bounded.
+
+\paragraph{Pointers}
+Pointers hold a numerical address (in the special number type $\N_*$) of a variable that can then be used to access the variable.
+There are two kinds of pointers: nullable and non-nullable pointers.
+A nullable pointer can also assume the $\nullptr$ address, which is inaccessible, while non-nullable pointers can only hold valid addresses.
+For any type $T$, nullable pointers are denoted as $T_?$, and non-nullable pointers as $T_!$.
+In digital circuits designs, pointers are not allowed, since they require that all values reside in an addressable memory.
+
+\paragraph{References}
+For any type $T$, a reference is denoted as $T'$.
+A $T'$-object is an alias to another $T$-object, and changes made to one object will also be visible in the other object.
+A reference object will always stay an alias to the same object.
+Double-references are equivalent to single references ($T''=T'$).
+In digital circuits, references are the equivalent of what is commonly known as a \emph{wire}: a direct connection to some module's output.
+In software programs, references are equivalent to pointers (but retain their restrictions).
+
+\paragraph{Arrays}
+For any type $T$ and number $N\in\N$, $\carray{T}{N}$ is a collection of $N$ values of type $T$.
+For an array object $\var{arr}{\carray{\N_8}{256}} \in \N_8^{256}$, $\carray{\cn{arr}}{i}$ is a separate object of type $\N_8$, with $0\le i <256$.
+$0$-sized arrays are allowed, and will be removed during compilation, as they cannot hold any values.
+
+\subsection{Structured/product types}
+Structured types are types that consist of multiple named sub-values.
+For example, a 24-bit RGB colour type is written as:
+	$\cn{RGB} = \struct{\var{r}{\N_8}}{\var{g}{\N_8}}{\var{b}{\N_8}}$.
+An empty structured type is denoted as $\struct$.
+An object of a structured type consists of its fields:
+	$\var{o}{\cn{RGB}}=(\memb{\cn{o}}{r}$, $\memb{\cn{o}}{g}$, $\memb{\cn{o}}{b}) \in \N_8^3$.
+
+\subsection{Union/sum types}
+Union types are types that can hold a value out of a set of other types:
+$T = \union{A_1}{A_2}{\ldots}{A_n}$.
+A union object $\var{o}{\union{A}{B}}$ is described by a pair $(v, T)$, where $v \in T$ is the $\cn{o}$'s value, and $T \in \set{A, B}$ is the currently active type in $\cn{o}$.
