@@ -1,0 +1,109 @@
+\section{Semantics}
+In this section, we describe the behaviour of all types and operations in \tetra.
+First, we describe the notation for various operations and their meaning.
+Afterwards, we create a calculus which defines all operations formally and allows the proving of behaviour.
+
+\subsection{Informal\optional}
+
+\subsubsection{Expressions}
+If $\cn o$ is an object, then let $\cn o$ denote a reference to $\cn o$, and $\val{\cn o}$ refer to $\cn o$'s value.
+Thus, for an object
+	$\var{o}{\struct{\var{a}{\bool}}{\var{b}{\N_8}}}$,
+	$\memb{\cn o}{a} \in \reft\bool$ is a reference to the field $\cn a$ in $\cn o$, while
+	$\val{\memb{\cn o}{a}} \in \bool$ refers to the value of $\cn a$ in $\cn o$.
+If $v,a,b$ are values with $v \in \bool$, then let
+	$\ifexp{v}{a}{b}$
+	evaluate to $a$ if $v = \true$, otherwise $b$.
+
+\subsubsection{Statements}
+\paragraph{Parallel and sequential statements}
+Let $s_1, s_2$ be operations.
+Then let $\parstmt{s_1}{s_2}$ be $s_1$ and $s_2$ in parallel, and
+	$\stmt{s_1}{s_2}$ be $s_1$ and $s_2$ in sequence.
+Parallel statements are executed simultaneously.
+Sequential statements are executed in the order in which they are written.
+
+\paragraph{Assignments}
+Let $v$ be a reference value, and $x$ a value, then let $\stmt{v \gets x}$ be an assignment statement of $x$ into $v$.
+
+\paragraph{Function calls}
+Let $f$ be a function, then let $s = \stmt{f(a,b,c)}$ be a statement invoking $f$ with the arguments $a$, $b$, and $c$.
+This is equivalent to a replacement of $s$ with $f$'s definition, and initialising $f$'s parameters to to $a$, $b$, and $c$, respectively.
+
+\subsection{Formal}
+
+Let $\State = \Symbol \to \Value$, where $\Symbol$ is the set of all variable names, and $\Value$ is the set of all object values be the set of all possible execution states.
+$\State$ is thus a mapping of variable names to variable values.
+Furthermore, let $\varnothing \in \State \cap \Value$ be the value for non-existant variables.
+Then $\varnothing(k): \Symbol \to \Value = \varnothing$ is the empty state.
+For $s \in \State$, let
+$$
+\StSet{s}{k}{v}: \Symbol \times \Value \to \State =
+	\kappa \mapsto \begin{cases}
+		v & \text{if } \kappa = k,\\
+		s(\kappa)
+\end{cases}$$
+and
+$$
+\StDel{s}{k}: \Symbol \to \State = \kappa \mapsto \begin{cases}
+	\varnothing & \text{if } \kappa = k,\\
+	s(\kappa)
+\end{cases}
+$$
+be the functions to (re-)define and delete a variable in a state, respectively.
+
+\subsubsection{Transition rules}
+Let $\Sigma$ be a state.
+This section describes the semantics for operations on $\Sigma$.
+In the following, semantic rules are of the form
+	$$\semrule{\mathit{Condition}}{{\Sigma, \mathit{Operation}}}{\Sigma'}$$
+	where
+		$\mathit{Operation}$ is the operation whose semantics is defined,
+		$\mathit{Condition}$ is the condition under which the rule is valid, and
+		$\Sigma'$ is the new state after $\mathit{Operation}$ is applied to $\Sigma$.
+There can be multiple rules with different conditions for the same operation.
+If an operation fulfills no conditions in any rules, it is invalid.
+Furthermore, we need the following relation:
+$$\results{\Sigma}{\omega}{\Sigma'} = \begin{cases}
+	\true & \text{if $\Sigma'$ is the result of operation $\omega$ on $\Sigma$,} \\
+	\false & \text{otherwise.}
+\end{cases}
+$$
+
+\paragraph{Sequence reduction}
+For any sequence of two operations $\omega_1, \omega_2$ the operations can be evaluated step by step.
+$$
+\semrule{
+	\results{\Sigma}{\stmt{\omega_1}}{\Sigma'} \land
+	\results{\Sigma'}{\stmt{\omega_2}}{\Sigma''}}
+	{\Sigma, \stmt{\omega_1}{\omega_2}}
+	{\Sigma''},
+	\Sigma', \Sigma'' \in \State
+$$
+
+\paragraph{Variable declaration}
+Declaring a variable creates an uninitialised entry for that variable in the state.
+For all types $T$, let $T_\varnothing$ be the uninitialised value of type $T$.
+Then a variable declaration works as follows:
+$$
+\semrule
+	{\Sigma(x) = \varnothing}
+	{\Sigma, \stmt{\varv{x}{T}}}
+	{\StSet{\Sigma}{x}{T_\varnothing}},
+		x \in \Symbol
+$$
+
+\paragraph{Variable assignment}
+An assignment assigns a value to a variable.
+This value has to be resolved already into a value of the same type as the variable.
+Only existing variables can be assigned.
+Let $\typeof{x}$ denote the type of $x$, where $x$ is a value.
+$$
+\semrule
+	{\Sigma(v), x \neq \varnothing \land
+		\typeof{x} = \typeof{\Sigma(v)}}
+	{\Sigma, \stmt{v \gets x}}
+	{\StSet{\Sigma}{v}{x}},
+		v \in \Symbol,
+		x \in \Value
+$$

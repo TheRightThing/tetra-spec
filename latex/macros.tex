@@ -10,12 +10,17 @@
 
 % cn: code name
 \newcommand{\cn}[1]{\mathtt{#1}}
+\newcommand{\val}[1]{{.}#1}
 \newcommand{\reft}[1]{#1'}
 \newcommand{\carray}[1]{#1[\,\recurse{}{\,][\,}{\,]}}
 \newcommand{\struct}[0]{\left\langle\,\recurse{}{;~}{\,\right\rangle}}
 \newcommand{\union}[0]{\left(\recurse{}{\,\cup\,}{\right)}}
 \newcommand{\var}[2]{\cn{#1}{\colon}{#2}}
+\newcommand{\varv}[2]{{#1}{\colon}{#2}}
 \newcommand{\memb}[1]{{#1}.\recurse{\cn}{.}{}}
+\newcommand{\stmt}[1]{\left\lceil\recurse{}{\,;\,}{\right\rfloor}{#1}}
+\newcommand{\parstmt}[1]{\left\lfloor\recurse{}{\,\|\,}{\right\rceil}{#1}}
+\newcommand{\ifexp}[3]{\left(#1\,?\,#2:#3\right)}
 \newcommand{\bool}[0]{\mathbb{B}}
 \newcommand{\Z}[0]{\mathbb{Z}}
 \newcommand{\N}[0]{\mathbb{N}}
@@ -23,6 +28,14 @@
 \newcommand{\true}[0]{\mathsf{true}}
 \newcommand{\false}[0]{\mathsf{false}}
 \newcommand{\cast}[2]{\left(#1 \to \recurse{}{\to}{\right)}{#2}}
+\newcommand{\State}[0]{\mathsf{State}}
+\newcommand{\Value}[0]{\mathsf{Value}}
+\newcommand{\Symbol}[0]{\mathsf{Symbol}}
+\newcommand{\StSet}[3]{#1.\mathsf{set}(#2, #3)}
+\newcommand{\StDel}[2]{#1.\mathsf{del}(#2)}
+\newcommand{\semrule}[3]{\frac{#1}{#2 \,\mapsto\, #3}}
+\newcommand{\typeof}[1]{\tau(#1)}
+\newcommand{\results}[3]{\left\langle\, #1, #2 \to #3 \,\right\rangle}
 
 
 % Helper macros.
