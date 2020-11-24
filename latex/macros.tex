@@ -21,6 +21,7 @@
 \newcommand{\stmt}[1]{\left\lceil\recurse{}{\,;\,}{\right\rfloor}{#1}}
 \newcommand{\parstmt}[1]{\left\lfloor\recurse{}{\,\|\,}{\right\rceil}{#1}}
 \newcommand{\ifexp}[3]{\left(#1\,?\,#2:#3\right)}
+\newcommand{\ifstmt}[3]{\texttt{\textbf{if}}~#1~\texttt{\textbf{then}}~#2~\texttt{\textbf{else}}~#3~\texttt{\textbf{endif}}}
 \newcommand{\bool}[0]{\mathbb{B}}
 \newcommand{\Z}[0]{\mathbb{Z}}
 \newcommand{\N}[0]{\mathbb{N}}
@@ -34,6 +35,7 @@
 \newcommand{\StSet}[3]{#1.\mathsf{set}(#2, #3)}
 \newcommand{\StDel}[2]{#1.\mathsf{del}(#2)}
 \newcommand{\semrule}[3]{\frac{#1}{#2 \,\mapsto\, #3}}
+\newcommand{\semruleeq}[3]{\frac{#1}{#2 \,\equiv\, #3}}
 \newcommand{\typeof}[1]{\tau(#1)}
 \newcommand{\results}[3]{\left\langle\, #1, #2 \to #3 \,\right\rangle}
 

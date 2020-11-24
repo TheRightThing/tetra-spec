@@ -69,6 +69,14 @@ $$\results{\Sigma}{\omega}{\Sigma'} = \begin{cases}
 	\false & \text{otherwise.}
 \end{cases}
 $$
+Another possible form is
+$$
+\semruleeq
+	{\mathit{Condition}}
+	{\Sigma, \mathit{Operation}}
+	{\Sigma, \mathit{Operation'}}
+$$
+which states that under a certain condition, one operation can be replaced with a different, equivalent operation.
 
 \paragraph{Sequence reduction}
 For any sequence of two operations $\omega_1, \omega_2$ the operations can be evaluated step by step.
@@ -98,6 +106,7 @@ An assignment assigns a value to a variable.
 This value has to be resolved already into a value of the same type as the variable.
 Only existing variables can be assigned.
 Let $\typeof{x}$ denote the type of $x$, where $x$ is a value.
+For non-reference types, assignments are as follows:
 $$
 \semrule
 	{\Sigma(v), x \neq \varnothing \land
@@ -106,4 +115,38 @@ $$
 	{\StSet{\Sigma}{v}{x}},
 		v \in \Symbol,
 		x \in \Value
+$$
+For any type $T$, reference assignments are as follows:
+$$
+\semrule
+	{\Sigma(v_1) = \reft{T}_\varnothing \land
+		\typeof{\Sigma(\Sigma(v_2))} = T}
+	{\Sigma, \stmt{v_1 \gets v_2}}
+	{\StSet{\Sigma}{v_1}{\Sigma(v_2)}}
+$$
+
+\paragraph{Variable destruction}
+The destructor operation removes a variable from the state.
+$$
+\semrule
+	{\Sigma(v) \neq \varnothing}
+	{\Sigma, \stmt{\dagger v}}
+	{\StSet{\Sigma}{v}{\varnothing}},
+		v \in \Symbol
+$$
+
+
+\paragraph{If statement}
+Let $c$ be a resolved value, and let $\omega_1, \omega_2$ be two operations.
+$$
+\semruleeq
+	{c = \true}
+	{\Sigma, \stmt{\ifstmt{c}{\omega_1}{\omega_2}}}
+	{\Sigma, \stmt{\omega_1}}
+$$
+$$
+\semruleeq
+	{c = \false}
+	{\Sigma, \stmt{\ifstmt{c}{\omega_1}{\omega_2}}}
+	{\Sigma, \stmt{\omega_2}}
 $$
