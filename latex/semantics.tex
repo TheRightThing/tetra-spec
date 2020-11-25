@@ -52,6 +52,31 @@ $$
 $$
 be the functions to (re-)define and delete a variable in a state, respectively.
 
+\paragraph{State operations}
+For $\sigma_1, \sigma_2 \in \State$, let
+$$
+	\sigma_1 \cap \sigma_2 =
+		\kappa \mapsto \begin{cases}
+			\sigma_1(v) &\text{if } \sigma_1(v) = \sigma_2(v),\\
+			\varnothing
+		\end{cases}
+$$
+$$
+	\sigma_1 \cup \sigma_2 =
+		\kappa \mapsto \begin{cases}
+			\sigma_2(v) &\text{if } \sigma_2(v) \neq \varnothing,\\
+			\sigma_1(v) &\text{else if } \sigma_1(v) \neq \varnothing,\\
+			\varnothing
+		\end{cases}
+$$
+$$
+	\sigma_1 \setminus \sigma_2 =
+		\kappa \mapsto \begin{cases}
+			\sigma_1(v) &\text{if } \sigma_2(v) = \varnothing,\\
+			\varnothing
+		\end{cases}
+$$
+
 \subsubsection{Transition rules}
 Let $\Sigma$ be a state.
 This section describes the semantics for operations on $\Sigma$.
