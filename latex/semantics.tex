@@ -88,6 +88,7 @@ In the following, semantic rules are of the form
 		$\Sigma'$ is the new state after $\mathit{Operation}$ is applied to $\Sigma$.
 There can be multiple rules with different conditions for the same operation.
 If an operation fulfills no conditions in any rules, it is invalid.
+The function $\Delta(\Sigma, \mathit{Operation}) = \Sigma_\Delta$ returns a state containing only the variables affected by the operation.
 Furthermore, we need the following relation:
 $$\results{\Sigma}{\omega}{\Sigma'} = \begin{cases}
 	\true & \text{if $\Sigma'$ is the result of operation $\omega$ on $\Sigma$,} \\
@@ -104,14 +105,47 @@ $$
 which states that under a certain condition, one operation can be replaced with a different, equivalent operation.
 
 \paragraph{Sequence reduction}
-For any sequence of two operations $\omega_1, \omega_2$ the operations can be evaluated step by step.
+For any sequence of $n$ operations $\omega_1, \ldots, \omega_n$ the operations can be evaluated step by step.
 $$
 \semrule{
-	\results{\Sigma}{\stmt{\omega_1}}{\Sigma'} \land
-	\results{\Sigma'}{\stmt{\omega_2}}{\Sigma''}}
-	{\Sigma, \stmt{\omega_1}{\omega_2}}
-	{\Sigma''},
-	\Sigma', \Sigma'' \in \State
+	\forall\, k \in \range{1}{n-1}: \results{\Sigma_k}{\stmt{\omega_k}}{\Sigma_{k+1}}}
+	{\Sigma_1, \stmt{\omega_1}{\ldots}{\omega_n}}
+	{\Sigma_n},
+	\Sigma_1, \ldots, \Sigma_n \in \State
+$$
+$$
+	\Delta(\Sigma_1, \stmt{\omega_1}{\ldots}{\omega_n}) =
+		(\Sigma_1 \cup \ldots \cup \Sigma_n) \setminus \Sigma_1
+$$
+$$
+\semruleeq{\true}
+	{\Sigma, \stmt{\omega_1}}
+	{\Sigma, \omega_1}
+$$
+
+\paragraph{Parallel reduction}
+For a parallel series of $n$ operations $\omega_1, \ldots, \omega_n$, their resulting state is merged using $\cup$.
+No variable modified by one statement may be accessed in another statement.
+$$
+	\semrule{
+		\results{\Sigma}{\omega_1}{\Sigma_1} \land
+		\results{\Sigma \setminus \Delta(\Sigma, \omega_1)}{\omega_2}{\Sigma_2}}
+		{\Sigma_1, \parstmt{\omega_1}{\omega_2}}
+		{\Sigma_1 \cup \Sigma_2},
+			\Sigma_1, \Sigma_2 \in \State
+$$
+$$
+	\Delta(\Sigma, \parstmt{\omega_1}{\ldots}{\omega_n}) = \Delta(\Sigma, \omega_1) \cup \ldots \cup \Delta(\Sigma, \omega_n)
+$$
+$$
+	\semruleeq{\true}
+		{\Sigma, \parstmt{\omega_1}{\omega_2}{\ldots}{\omega_n}}
+		{\Sigma, \parstmt{\parstmt{\omega_1}{\omega_2}}{\omega_3}{\ldots}{\omega_n}}
+$$
+$$
+\semruleeq{\true}
+	{\Sigma, \parstmt{\omega_1}}
+	{\Sigma, \omega_1}
 $$
 
 \paragraph{Variable declaration}
