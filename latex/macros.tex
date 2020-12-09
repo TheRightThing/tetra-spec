@@ -32,12 +32,15 @@
 \newcommand{\State}[0]{\mathsf{State}}
 \newcommand{\Value}[0]{\mathsf{Value}}
 \newcommand{\Symbol}[0]{\mathsf{Symbol}}
+\newcommand{\Expr}[0]{\mathsf{Expr}}
 \newcommand{\StSet}[3]{#1.\mathsf{set}(#2, #3)}
 \newcommand{\StDel}[2]{#1.\mathsf{del}(#2)}
 \newcommand{\semrule}[3]{\frac{#1}{#2 \,\mapsto\, #3}}
 \newcommand{\semruleeq}[3]{\frac{#1}{#2 \,\equiv\, #3}}
 \newcommand{\typeof}[1]{\tau(#1)}
 \newcommand{\results}[3]{\left\langle\, #1, #2 \to #3 \,\right\rangle}
+\newcommand{\forstmt}[4]{\texttt{for(}#1 \texttt{;} #2 \texttt{;} #3 \texttt{)\{} #4 \texttt{\}}}
+\newcommand{\whilestmt}[2]{\texttt{while(} #1 \texttt{)\{} #2 \texttt{\}}}
 
 
 % Helper macros.

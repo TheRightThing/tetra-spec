@@ -35,6 +35,7 @@ This is equivalent to a replacement of $s$ with $f$'s definition, and initialisi
 Let $\State = \Symbol \to \Value$, where $\Symbol$ is the set of all variable names, and $\Value$ is the set of all object values be the set of all possible execution states.
 $\State$ is thus a mapping of variable names to variable values.
 Furthermore, let $\varnothing \in \State \cap \Value$ be the value for non-existant variables.
+Let $\dagger$ be the value for destructed variables.
 Then $\varnothing(k): \Symbol \to \Value = \varnothing$ is the empty state.
 For $s \in \State$, let
 $$
@@ -86,6 +87,7 @@ In the following, semantic rules are of the form
 		$\mathit{Operation}$ is the operation whose semantics is defined,
 		$\mathit{Condition}$ is the condition under which the rule is valid, and
 		$\Sigma'$ is the new state after $\mathit{Operation}$ is applied to $\Sigma$.
+Thus, we describe big step semantics.
 There can be multiple rules with different conditions for the same operation.
 If an operation fulfills no conditions in any rules, it is invalid.
 The function $\Delta(\Sigma, \mathit{Operation}) = \Sigma_\Delta$ returns a state containing only the variables affected by the operation.
@@ -103,6 +105,11 @@ $$
 	{\Sigma, \mathit{Operation'}}
 $$
 which states that under a certain condition, one operation can be replaced with a different, equivalent operation.
+
+\paragraph{Expressions}
+Let $\Expr: \State \to \State \times \Value$ be the set of all expressions.
+An expression takes the program state and returns a modified state and result.
+The function $\Delta(\Sigma, \Expr) = \Sigma_{\Delta}$ contains all variables affected by the expression.
 
 \paragraph{Sequence reduction}
 For any sequence of $n$ operations $\omega_1, \ldots, \omega_n$ the operations can be evaluated step by step.
@@ -159,12 +166,16 @@ $$
 	{\StSet{\Sigma}{x}{T_\varnothing}},
 		x \in \Symbol
 $$
+$$
+\Delta(\Sigma, \stmt{\varv{x}{T}}) = \StSet{\varnothing}{x}{T_\varnothing},
+                x \in \Symbol
+$$
 
 \paragraph{Variable assignment}
 An assignment assigns a value to a variable.
 This value has to be resolved already into a value of the same type as the variable.
 Only existing variables can be assigned.
-Let $\typeof{x}$ denote the type of $x$, where $x$ is a value.
+Let $\typeof{x}$ denote the type of $x$, where $x \in \Value$, and let $v \in \Symbol$.
 For non-reference types, assignments are as follows:
 $$
 \semrule
@@ -172,8 +183,9 @@ $$
 		\typeof{x} = \typeof{\Sigma(v)}}
 	{\Sigma, \stmt{v \gets x}}
 	{\StSet{\Sigma}{v}{x}},
-		v \in \Symbol,
-		x \in \Value
+$$
+$$
+\Delta(\Sigma, \stmt{v \gets x}) = \StSet{\varnothing}{v}{x}
 $$
 For any type $T$, reference assignments are as follows:
 $$
@@ -190,8 +202,11 @@ $$
 \semrule
 	{\Sigma(v) \neq \varnothing}
 	{\Sigma, \stmt{\dagger v}}
-	{\StSet{\Sigma}{v}{\varnothing}},
+	{\StSet{\Sigma}{v}{\dagger}},
 		v \in \Symbol
+$$
+$$
+\Delta(\Sigma, \stmt{\dagger v}) = \StSet{\varnothing}{v}{\dagger}
 $$
 
 
@@ -208,4 +223,37 @@ $$
 	{c = \false}
 	{\Sigma, \stmt{\ifstmt{c}{\omega_1}{\omega_2}}}
 	{\Sigma, \stmt{\omega_2}}
+$$
+$$
+\Delta(\Sigma, \ifstmt{c}{\omega_1}{\omega_2}) =
+\begin{cases}
+  \Delta(\Sigma', \stmt{c}{\omega_1}), ~ \text{if } c(\Sigma) = (\Sigma', \true)\\
+  \Delta(\Sigma', \stmt{c}{\omega_2}), ~ \text{if } c(\Sigma) = (\Sigma', \false)
+\end{cases}
+$$
+
+\paragraph{While statement}
+Let $c$ be an expression, and let $\omega$ be an operation.
+$$
+\semruleeq
+       {\true}
+       {\Sigma, \whilestmt{c}{\omega}}
+       {\Sigma, \ifstmt{c}{\stmt{\omega}{\whilestmt{c}{\omega}}}{\stmt}}
+$$
+
+\paragraph{For statement}
+Let $c$ be an expression, and let $\omega_{1,\ldots,3}$ be operations.
+$$
+\semruleeq
+        {\true}
+        {\Sigma, \forstmt{\omega_1}{c}{\omega_2}{\omega_3}}
+        {\Sigma, \stmt{\omega_1}{\whilestmt{c}{\stmt{\omega_3}{\omega_2}}}}
+$$
+
+\paragraph{Variable expression}
+$$
+\Sigma(\val{v}) = (\Sigma, \Sigma(v))
+$$
+$$
+\Delta(\Sigma, \val{v}) = \varnothing
 $$
