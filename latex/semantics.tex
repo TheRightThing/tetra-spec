@@ -112,6 +112,7 @@ An expression takes the program state and returns a modified state and result.
 The function $\Delta(\Sigma, \Expr) = \Sigma_{\Delta}$ contains all variables affected by the expression.
 
 \paragraph{Sequence reduction}
+% TODO: allow \Sigma(op1, ...) to return a value.
 For any sequence of $n$ operations $\omega_1, \ldots, \omega_n$ the operations can be evaluated step by step.
 $$
 \semrule{
@@ -251,9 +252,37 @@ $$
 $$
 
 \paragraph{Variable expression}
+Let $v$ be a variable name.
 $$
 \Sigma(\val{v}) = (\Sigma, \Sigma(v))
 $$
 $$
 \Delta(\Sigma, \val{v}) = \varnothing
+$$
+
+\paragraph{Function call expressions}
+Let $f \in \Value^n \to \Operation \cup \Expr$ an $n$-ary function, and $v_{1, \ldots, n}$ be values.
+Then the invocation $f(v_1, \ldots, v_n)$ expands to the operation that defines the function.
+Let $a_{1, \ldots, n}$ be expressions.
+Then $\opexp{f}{a_1}{\ldots}{a_n}$ is a call expression.
+$$
+\Sigma(\opexp{f}{a_1}{\ldots}{a_n}) = \Sigma_n(f(v_1, \ldots, v_n)),
+	(\Sigma_i, v_i) = \Sigma_{i-1}(a_i),
+		\Sigma_0 = \Sigma, 1 \le i \le n
+$$
+$$
+\Delta(\Sigma, \opexp{f}{a_1}{\ldots}{a_n}) =
+		\cup_{1 \le i \le n} \Delta(\Sigma_i, a_i),
+	(\Sigma_i, v_i) = \Sigma_{i-1}(a_i),
+		\Sigma_0 = \Sigma, 1 \le i \le n
+$$
+
+\paragraph{Return statement}
+Let $x$ be an expression.
+Then $\retstmt{x}$ is a return statement and will terminate a sequence of operations early with the given expression as its result.
+$$
+\Sigma(\stmt{\retstmt{x}}{\ldots}) = \Sigma(x)
+$$
+$$
+\Delta(\Sigma, \stmt{\retstmt{x}}{\ldots}) = \Delta(\Sigma, x)
 $$

@@ -19,6 +19,7 @@
 \newcommand{\varv}[2]{{#1}{\colon}{#2}}
 \newcommand{\memb}[1]{{#1}.\recurse{\cn}{.}{}}
 \newcommand{\stmt}[1]{\left\lceil\recurse{}{\,;\,}{\right\rfloor}{#1}}
+\newcommand{\retstmt}[1]{\texttt{\textbf{return}}~#1}
 \newcommand{\parstmt}[1]{\left\lfloor\recurse{}{\,\|\,}{\right\rceil}{#1}}
 \newcommand{\ifexp}[3]{\left(#1\,?\,#2:#3\right)}
 \newcommand{\ifstmt}[3]{\texttt{\textbf{if}}~#1~\texttt{\textbf{then}}~#2~\texttt{\textbf{else}}~#3~\texttt{\textbf{endif}}}
@@ -31,6 +32,7 @@
 \newcommand{\cast}[2]{\left(#1 \to \recurse{}{\to}{\right)}{#2}}
 \newcommand{\State}[0]{\mathsf{State}}
 \newcommand{\Value}[0]{\mathsf{Value}}
+\newcommand{\Operation}[0]{\mathsf{Operation}}
 \newcommand{\Symbol}[0]{\mathsf{Symbol}}
 \newcommand{\Expr}[0]{\mathsf{Expr}}
 \newcommand{\StSet}[3]{#1.\mathsf{set}(#2, #3)}
@@ -41,7 +43,10 @@
 \newcommand{\results}[3]{\left\langle\, #1, #2 \to #3 \,\right\rangle}
 \newcommand{\forstmt}[4]{\texttt{for(}#1 \texttt{;} #2 \texttt{;} #3 \texttt{)\{} #4 \texttt{\}}}
 \newcommand{\whilestmt}[2]{\texttt{while(} #1 \texttt{)\{} #2 \texttt{\}}}
-
+%\opexp{op}{a0}{...}{an}
+\newcommand{\opexp}[1]{\ttlparen\,\recurse{}{~}{\,\ttrparen}{#1}}
+\newcommand{\ttlparen}[0]{\texttt{(}}
+\newcommand{\ttrparen}[0]{\texttt{)}}
 
 % Helper macros.
 \makeatletter
