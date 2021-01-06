@@ -51,7 +51,6 @@ FOR v IN in {
 ```
 
 ``` Not Tetra
-
 \forall e in A -> \exists x in B
 not \forall e in A -> \exists x in B
 
@@ -76,7 +75,6 @@ for Iter.Next() {
 ```
 
 ```
-
 // Composition
 type U = A | B | C | D
 
@@ -123,3 +121,126 @@ h Integer = {
 }
 
 ```
+
+# Throwables
+* Traced:
+    -> Tuple with field for Stacktrace
+* Untraced:
+    -> Single field
+
+# Compiling
+* Parallelizing compilation.
+* Feature for parallelizing stuff within a single file:
+    * Should be possible with our scoping system.
+
+# Typesytem
+
+## Typedecorations:
+* Pattern-Matchable.
+* Remark: Globally defined.
+* How to handle tagged types, which form a superset to untagged types?:
+* E. g. tagged pointer used as a param for untagged pointer.
+* How to guarantee possible contraints.
+* Like `typedef`, custom typedecoraters can be specified:
+  * Not global, but accessible by scope.
+  * First does matching against itself and then, if not successful, match against expanded definition:
+    * E.g. custom typedecorater `sharedPtr ::= :gc | :shared`.
+    * First match against `sharedPtr`, then `:gc | :shared`.
+* List of **irreconcilable** decorators for types.
+
+## Typed Enums
+```
+// We do not want this:
+
+enum Token {
+  COMMA,
+  DOT,
+}
+
+c :: Token -> String
+c COMMA = ","
+c DOT = "."
+
+// We want this:
+
+class Person {}
+
+enum Employee -> Person {
+  Manager: Person(constructorparamsManager),
+  Pleb: Person(constructorparamsPleb),
+}
+
+enum Token -> String {
+  COMMA: ",",
+  DOT: ".",
+}
+
+// For bijective mapping only possible iff BASECLASS instance of Ord &&/|| Eq.
+enum NAME -> BASECLASS {}
+```
+
+# Namespacing
+* Can be extended by using the same namespace in different source files.
+* `private` for namespacing.
+* `import` via files:
+  * How would one handle interpreters "conveniently".
+* Settle on `private` keywords for namespace visibility (`public` per default):
+  * Note: Complex libraries/projects requiring distributed namespaces over multiple files should use a dedicated "exportheader".
+* Every file would have `export *` implicitly.
+* For export file one would explicitly say: `export // define detailed exports`.
+* Access to namespaces with the `NAMESPACE::NAMESPACE` operator.
+```
+// in the following `::` = `namespace`
+
+// file03
+importprotected as Z from "file01";
+::Y {
+  X.f2()
+}
+
+// file01
+::X {
+  class C1 
+  function f1() {}
+  function f2() {}
+  function private f3() {}
+}
+
+// file02
+import from "file01";
+::X {
+  function f4() {}
+  function f3() {}
+}
+```
+
+# Keywords
+`private` for namespacing.
+`private` for class visibility.
+`import` for imports.
+`import*` for imports which also reexport everything imported.
+`export` for defining WHAT to export from a file.
+
+# Integerconstants
+* Per default infinite precision integer:
+  * Implies that bitrotates for shifting is useless.
+
+# Functions and Methods
+* TODO: Think about function signatures...
+
+## Templates and Constraints
+```
+[T: TYPE(Constraint1,...,ConstraintN), U: TYPE]
+[I: NUMBER]
+[T: TYPE, Order: (T, T -> Signed)] Set {...}
+```
+
+## Foreign Function Interface (FFI)
+* TODO
+
+## Hardware-Module interop
+* TODO
+
+## Notes
+* Separation of declaration and definition:
+  * Do not support, rather force rethinking/redesigning...
