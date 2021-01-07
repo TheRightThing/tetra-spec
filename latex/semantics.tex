@@ -35,7 +35,8 @@ This is equivalent to a replacement of $s$ with $f$'s definition, and initialisi
 Let $\State = \Symbol \to \Value$, where $\Symbol$ is the set of all variable names, and $\Value$ is the set of all object values be the set of all possible execution states.
 $\State$ is thus a mapping of variable names to variable values.
 Furthermore, let $\varnothing \in \State \cap \Value$ be the value for non-existant variables.
-Let $\dagger$ be the value for destructed variables.
+Let $\dagger$ be a special value reserved for destroyed variables.
+Let $\Box$ be a special value for existing, but inaccessible (\emph{blocked}) variables.
 Then $\varnothing(k): \Symbol \to \Value = \varnothing$ is the empty state.
 For $s \in \State$, let
 $$
@@ -55,28 +56,24 @@ be the functions to (re-)define and delete a variable in a state, respectively.
 
 \paragraph{State operations}
 For $\sigma_1, \sigma_2 \in \State$, let
-$$
-	\sigma_1 \cap \sigma_2 =
-		\kappa \mapsto \begin{cases}
-			\sigma_1(v) &\text{if } \sigma_1(v) = \sigma_2(v),\\
-			\varnothing
-		\end{cases}
-$$
-$$
+$$\text{(Merging) }
 	\sigma_1 \cup \sigma_2 =
 		\kappa \mapsto \begin{cases}
-			\sigma_2(v) &\text{if } \sigma_2(v) \neq \varnothing,\\
-			\sigma_1(v) &\text{else if } \sigma_1(v) \neq \varnothing,\\
-			\varnothing
+			\sigma_2(\kappa) &\text{if } \sigma_2(\kappa) \notin \set{\varnothing, \Box},\\
+			\sigma_1(\kappa)
 		\end{cases}
 $$
-$$
+$$\text{(Blocking) }
 	\sigma_1 \setminus \sigma_2 =
 		\kappa \mapsto \begin{cases}
-			\sigma_1(v) &\text{if } \sigma_2(v) = \varnothing,\\
-			\varnothing
+			\sigma_1(\kappa) &\text{if } \sigma_2(\kappa) \in \set{\varnothing, \Box},\\
+			\dagger &\text{if } \sigma_2(\kappa) = \dagger,\\
+			\Box
 		\end{cases}
 $$
+Note that both operations are not commutative.
+When merging to states using $\cup$, the right-hand state is the ``newer'' or ``more recent'' state and its values take precedence.
+When blocking a state's values in another state using $\setminus$, all existing values in the right-hand state become blocked in the left-hand state.
 
 \subsubsection{Transition rules}
 Let $\Sigma$ be a state.
@@ -192,7 +189,7 @@ Let $\typeof{x}$ denote the type of $x$, where $x \in \Value$, and let $v \in \S
 For non-reference types, assignments are as follows:
 $$
 \semrule
-	{\Sigma(v), x \neq \varnothing \land
+	{\Sigma(v), x \notin \set{\varnothing, \dagger, \Box} \land
 		\typeof{x} = \typeof{\Sigma(v)}}
 	{\Sigma, \stmt{v \gets x}}
 	{\StSet{\Sigma}{v}{x}},
@@ -210,10 +207,10 @@ $$
 $$
 
 \paragraph{Variable destruction}
-The destructor operation removes a variable from the state.
+The destructor operation makes a variable invalid and no longer modifiable.
 $$
 \semrule
-	{\Sigma(v) \neq \varnothing}
+	{\Sigma(v) \notin \set{\varnothing, \dagger, \Box}}
 	{\Sigma, \stmt{\dagger v}}
 	{\StSet{\Sigma}{v}{\dagger}},
 		v \in \Symbol
@@ -266,7 +263,8 @@ $$
 \paragraph{Variable expression}
 Let $v$ be a variable name.
 $$
-\Sigma(\val{v}) = (\Sigma, \Sigma(v))
+\Sigma(\val{v}) = (\Sigma, \Sigma(v)),
+	\Sigma(v) \notin \set{\Box, \dagger, \varnothing}
 $$
 $$
 \Delta(\Sigma, \val{v}) = \varnothing
