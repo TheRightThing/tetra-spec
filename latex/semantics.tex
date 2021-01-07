@@ -112,7 +112,6 @@ An expression takes the program state and returns a modified state and result.
 The function $\Delta(\Sigma, \Expr) = \Sigma_{\Delta}$ contains all variables affected by the expression.
 
 \paragraph{Sequence reduction}
-% TODO: allow \Sigma(op1, ...) to return a value.
 For any sequence of $n$ operations $\omega_1, \ldots, \omega_n$ the operations can be evaluated step by step.
 $$
 \semrule{
@@ -123,8 +122,21 @@ $$
 $$
 $$
 	\Delta(\Sigma_1, \stmt{\omega_1}{\ldots}{\omega_n}) =
-		(\Sigma_1 \cup \ldots \cup \Sigma_n) \setminus \Sigma_1
+		\Delta(\Sigma_1, \omega_1) \cup \ldots \cup \Delta(\Sigma_n, \omega_n)
 $$
+
+$$
+\semrule{
+	\forall\, k \in \range{1}{i-1}: \results{\Sigma_k}{\stmt{\omega_k}}{\Sigma_{k+1}}}
+	{\Sigma_1, \stmt{\omega_1}{\ldots}{\omega_i}{\retstmt{x}}{\omega_{i+1}}{\ldots}{\omega_n}}
+	{\Sigma_i},
+	\Sigma_1, \ldots, \Sigma_i \in \State
+$$
+$$
+	\Delta(\Sigma_1, \stmt{\omega_1}{\ldots}{\omega_i}{\retstmt{x}}{\omega_{i+1}}{\ldots}{\omega_n}) =
+		\Delta(\Sigma_1, \omega_1) \cup \ldots \cup \Delta(\Sigma_i, \omega_i)
+$$
+
 $$
 \semruleeq{\true}
 	{\Sigma, \stmt{\omega_1}}
@@ -266,7 +278,7 @@ Then the invocation $f(v_1, \ldots, v_n)$ expands to the operation that defines 
 Let $a_{1, \ldots, n}$ be expressions.
 Then $\opexp{f}{a_1}{\ldots}{a_n}$ is a call expression.
 $$
-\Sigma(\opexp{f}{a_1}{\ldots}{a_n}) = \Sigma_n(f(v_1, \ldots, v_n)),
+\Sigma(\opexp{f}{a_1}{\ldots}{a_n}) = \Sigma_n(\ttlparen f(v_1, \ldots, v_n) \ttrparen),
 	(\Sigma_i, v_i) = \Sigma_{i-1}(a_i),
 		\Sigma_0 = \Sigma, 1 \le i \le n
 $$
@@ -281,8 +293,19 @@ $$
 Let $x$ be an expression.
 Then $\retstmt{x}$ is a return statement and will terminate a sequence of operations early with the given expression as its result.
 $$
-\Sigma(\stmt{\retstmt{x}}{\ldots}) = \Sigma(x)
+\Sigma(\ttlparen \omega \ttrparen) = \Sigma'(\ttlparen \omega' \ttrparen),
+	\equivs{\Sigma}{\omega}{\Sigma', \omega'}
 $$
 $$
-\Delta(\Sigma, \stmt{\retstmt{x}}{\ldots}) = \Delta(\Sigma, x)
+\Sigma(\ttlparen \omega \ttrparen) = \Sigma',
+	\results{\Sigma}{\omega}{\Sigma'}
+$$
+$$
+\Delta(\Sigma, \ttlparen \omega \ttrparen) = \Delta(\Sigma, \omega)
+$$
+$$
+\Sigma(\ttlparen \stmt{\retstmt{x}}{\ldots} \ttrparen) = (\Sigma', v) = \Sigma(x)
+$$
+$$
+\Delta(\Sigma, \ttlparen \stmt{\retstmt{x}}{\ldots} \ttrparen) = \Delta(\Sigma, x)
 $$
