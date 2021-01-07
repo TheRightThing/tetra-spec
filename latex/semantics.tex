@@ -260,6 +260,21 @@ $$
         {\Sigma, \stmt{\omega_1}{\whilestmt{c}{\stmt{\omega_3}{\omega_2}}}}
 $$
 
+\paragraph{Parallel for statement}
+Let $c$ be an expression, and let operation $\omega(i)$ be the iteration body, where $i$ is the iterator value.
+$$
+\semruleeq
+        {\true}
+        {\Sigma, \parforstmt{v}{\omega}}
+        {\Sigma, \parstmt
+        	{\omega(a)}
+        	{\omega(a+1)}
+        	{\ldots}
+        	{\omega(b)}},
+        (\Sigma, a) = \Sigma(\val{\memb{v}{start}}),
+        (\Sigma, b) = \Sigma(\val{\memb{v}{end}})
+$$
+
 \paragraph{Variable expression}
 Let $v$ be a variable name.
 $$
