@@ -28,7 +28,7 @@ Allow defined token behaviour of 1. and 3. also in `switch`.
   * No unknown template member functions => constrained templates:
     * Only make members of template types accessible via constraint types.
 
-``` Tetra
+```Tetra
 @ == coroutine
 
 function(f: ((int, int) @? int)) @? float := float(f(1,1))/2;
@@ -42,7 +42,7 @@ function(f: ((int, int) @? int)) @? float := float(f(1,1))/2;
 # Generators
 * Not implemented by abusing coroutines, but rather separate language construct.
 
-``` Tetra
+```Tetra
 ip == inputfeed // generator, i-connection, filestream
 
 FOR v IN in {
@@ -50,7 +50,7 @@ FOR v IN in {
 }
 ```
 
-``` Not Tetra
+```Not Tetra
 \forall e in A -> \exists x in B
 not \forall e in A -> \exists x in B
 
@@ -226,7 +226,62 @@ import from "file01";
   * Implies that bitrotates for shifting is useless.
 
 # Functions and Methods
-* TODO: Think about function signatures...
+* Different parentheses to distinguish between function call `[]` and compound expressions `()`.
+* Goal: Possibly reduce amount of paretheses needed:
+```Tetra
+// Function call with evaluated args.
+f 1 2
+
+// Function call with nested function calls and compound expression.
+f [g 1 2, 420] == f (g 1 2) 420 == f [(g 1 2), 420]
+
+// Multiple nested function calls and compound expressions.
+// case of f == (+) && h == (-)
+g [f 1 2, h 4 5] == g [(f 1 2), (h 4 5)] == g 3 (-1)
+```
+* Index lookup for container types are equivalent to function calls `[]`, so there is no ambiguity.
+* Note prefix curly braces for template arguments.
+```Tetra
+c: {Int}IndexableContainer
+f c[2] == f (c 2) == f [c[2]] == f [(c[2])] == ...
+
+{T} fun [a: int, b: bool, c: container, anonymType] {int}Vector [ 
+  if (expr) [
+    return 420
+  ] else [
+    return 69
+  ]
+  
+  if (expr)
+    return 420
+  else
+    return 69
+    
+  // partial
+  switch [variable] [
+    case1:
+    case2:
+    caseN:
+  ]
+  
+  switch (variable) [
+    case1:
+    case2:
+    caseN:
+    default:
+  ]
+  
+  while (expr) [ // body ]
+  
+  // == -> equals
+  // := -> assignment
+  // ::= -> autovariable
+  for (v ::= 0; cond_expr; expr) [ // body ]
+  
+  do (// optional variable) [ // body ] for (cond_expr; expr)
+]
+```
+* TODO: semantics add do-for.
 
 ## Templates and Constraints
 ```
@@ -236,7 +291,49 @@ import from "file01";
 ```
 
 ## Foreign Function Interface (FFI)
-* TODO
+* In case of user space scheduling, foreign functions need to be executed in a extra thread:
+  * Some languages might already support this behaviour, which can be expressed in the FFI interface implementation.
+  * FFI tagging in interface implementation to describe potentially `heavy/light` (long/short running) workloads?
+```
+| ^^^^^^^^  |
+| some lang |
+| _________ |
+      |
+      v
+| ^^^^^^^^^^^ |
+| impl FFI    |
+|-------------|
+      |__ c-extension __
+                        |
+                        v
+                  | ^^^^^^^ |
+            ----> | Tetra-C |
+      .____/      |---------|
+      |
+      |
+| ^^^^^^^^  |
+| Tetra-Src |
+| _________ |
+```
+* Concrete FFI:
+  * Support required calling conventions within compiler when code is generated.
+
+### External language binding generators, e.g.:
+```C
+void f(int i) { // body }
+```
+```Tetra
+// Should be usable as if it was a native tetra function.
+f 420
+```
+* What about foreign structs/classes/datatypes...:
+  * Padding alignment differs from language to language.
+  * Pointersizes.
+  * Tetra types -> Foreign types:
+    * E.g. unbounded/bounded ints.
+    * most likely handled by custom defined conversion operators.
+  * Tetra abstractions <-> Foreign abstractions:
+    * E.g. Golang style interfaces, C++ con-/destructor.
 
 ## Hardware-Module interop
 * TODO
