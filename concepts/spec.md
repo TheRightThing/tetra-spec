@@ -72,6 +72,8 @@
 
 ## IDE
 * Like black box parts of a electric circuit for components.
+* Use gestures for syntax constructs:
+  * How do we revolutionise code creation?
 
 ## Tag
 Contextual changes for types and functions:
@@ -86,6 +88,7 @@ Contextual changes for types and functions:
 ### Annotations
 Tagnames have to refer to code-entities.
 Can hold values.
+Give context for whole module, please do not think of a single file (: thx.
 For each tagname can be defined which value it holds.
 Think of Golangs \`\` annotation system e.g.
 `json` which allows stuff like this:
@@ -98,6 +101,7 @@ Just better.
 
 ## Labels
 Self-clearing tags on instantiation.
+Do not propagate.
 
 ## Layer
 Each layer one would want to reason about program code.
@@ -121,9 +125,10 @@ Deduced from code-analysis.
 * Include Tests and Assertions directly in the language:
   * Debug- & Release-Assertions included.
 * Generic mode which tries to "act" upon the given compile target.
+  * Target dependent implementations (overloading).
 
 ## Which language to use for compiler
-* Glorious Haskell
+* Glorious Haskell.
 
 ## SIMD
 * Apply simultaneous/parallel execution.
@@ -133,17 +138,20 @@ Deduced from code-analysis.
  
 ## Consistency:
 * Understand relaxed, causal, sequential consistency.
-* Maybe `eventual` consistency? (Definitely nice for distributed systems)
 * Consistency either for `operations` or `variables`:
   * Variable: could be tagged as `eventually` consistent.
 * **Atomics**:
   * Native support
 
 ## Support for TCO
-* Differentiate between destructors and clean-up operations.
+* Differentiate between destructors and clean-up operations:
+  * Add Hooks:
+    * **out of scope**
+    * **last usage**
 * **Relaxed RAII like construct**
 
 ## FOR | WHILE | SWITCH Constructs
+**Might be obsolete**
 * Make them "self-definable"?
 * Might use tags:
   * e.g. can define scheduler for `for` loops.
@@ -151,23 +159,30 @@ Deduced from code-analysis.
 ## Test
 * **Test-Keyword**
 * **Mocking-Keyword**:
+  * Inject mock-behaviour/mock-values into existing objects.
   * Maybe for return values?
-  * Retruns mock-default of return type.
+  * Returns mock-default of return type.
 * Better-Monkey-Patching -> Go hand in hand with tags.
-* Mutation-testing via Monkey-Patching or similar?*
+* Mutation-testing via Monkey-Patching or similar?
 * **Generalized tests**:
   * Attach to some interface or similar, so everything implementing this
     interface can automatically be executed by the test and have a generalized
     testcase derived (also applies to concepts).
   * Attached generalized tests can provide additional interfaces, which have to
     be implemented by the underlying implementation of the parent-interface.
+    * Add more functions like constructors which have to be supplied to allow
+      instantiation of tested types/variables.
+  * Similar to generators used in property testing.
 * **How to support Test-Driven-Design**:
   * TBD
 
 ## Error-Handling
 * Maybe move to different layer?
-* Should not impact function signature, nor caller code.
+* Should not impact function signature, nor caller code:
+  * Signature still has a "hint" describing **THAT** some error might occur,
+    but not how. I.e. it does not matter for the developer if the function
+    throws, errors whatever.
 * **Need more thoughts/ideas**
 
 ## Levitating ideas
-* Frequency analysis for concurrency problems
+* Serdhrapl nanylfvf sbe pbapheerapl ceboyrzf
