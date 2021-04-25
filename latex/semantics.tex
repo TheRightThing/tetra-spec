@@ -75,6 +75,13 @@ Note that both operations are not commutative.
 When merging to states using $\cup$, the right-hand state is the ``newer'' or ``more recent'' state and its values take precedence.
 When blocking a state's values in another state using $\setminus$, all existing values in the right-hand state become blocked in the left-hand state.
 
+\paragraph{Values}
+All $v \in \Value$ are of the form $v = (i, T)$ where $i$ is the internal representation of the value and $T$ is its type.
+Then $\tau(v) = T$ resolves the type and $\psi(v) = i$ the internal representation of the given value.
+Let $a, b \in \Value$ be values, following is a general short-hand notation used throughout the whole paper: operations on values act on internal representation;
+using the expression $a + b$ is equivalent to $\psi(a) + \psi(b)$ and the infix notation can be used instead of the prefix notation ($a + b \equiv \opexp{+}{a}{b}$).
+Numbers of the unbounded integer type are denoted as $1^*, 2^*$, etc.
+
 \subsubsection{Transition rules}
 Let $\Sigma$ be a state.
 This section describes the semantics for operations on $\Sigma$.
