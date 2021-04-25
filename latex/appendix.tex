@@ -1,0 +1,12 @@
+\section{Appendix}
+\subsection{Code examples}
+\paragraph{Fibonacci}
+This is a simple Fibonacci sequence implementation.
+\begin{equation*}
+\begin{split}
+F(n) = & \\ \lceil
+	&\ifstmt{n < 1^*}{\retstmt{0^*}}{};\\
+	&\ifstmt{n = 1^*}{\retstmt{1^*}}{};\\
+	&\retstmt{\opexp{F}{n - 1^*} + \opexp{F}{n - 2^*}} \rfloor
+\end{split}
+\end{equation*}
