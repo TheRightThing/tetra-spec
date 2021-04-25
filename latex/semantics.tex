@@ -145,9 +145,9 @@ For a parallel series of $n$ operations $\omega_1, \ldots, \omega_n$, their resu
 No variable modified by one statement may be accessed in another statement.
 $$
 	\semrule{
-		\results{\Sigma}{\omega_1}{\Sigma_1} \land
+		\results{\Sigma \setminus \Delta(\Sigma, \omega_2)}{\omega_1}{\Sigma_1} \land
 		\results{\Sigma \setminus \Delta(\Sigma, \omega_1)}{\omega_2}{\Sigma_2}}
-		{\Sigma_1, \parstmt{\omega_1}{\omega_2}}
+		{\Sigma, \parstmt{\omega_1}{\omega_2}}
 		{\Sigma_1 \cup \Sigma_2},
 			\Sigma_1, \Sigma_2 \in \State
 $$
