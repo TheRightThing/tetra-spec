@@ -286,7 +286,7 @@ $$
 $$
 
 \paragraph{Function call expressions}
-Let $f \in \Value^n \to \Operation \cup \Expr$ an $n$-ary function, and $v_{1, \ldots, n}$ be values.
+Let $f \in \Value^n \to \Operation \cup \Expr$ be an $n$-ary function, and $v_{1, \ldots, n}$ be values.
 Then the invocation $f(v_1, \ldots, v_n)$ expands to the operation that defines the function.
 Let $a_{1, \ldots, n}$ be expressions.
 Then $\opexp{f}{a_1}{\ldots}{a_n}$ is a call expression.
@@ -295,12 +295,13 @@ $$
 	(\Sigma_i, v_i) = \Sigma_{i-1}(a_i),
 		\Sigma_0 = \Sigma, 1 \le i \le n
 $$
-$$
-\Delta(\Sigma, \opexp{f}{a_1}{\ldots}{a_n}) =
-		\cup_{1 \le i \le n} \Delta(\Sigma_i, a_i),
-	(\Sigma_i, v_i) = \Sigma_{i-1}(a_i),
-		\Sigma_0 = \Sigma, 1 \le i \le n
-$$
+\begin{equation*}
+\begin{split}
+\Delta(\Sigma, \opexp{f}{a_1}{\ldots}{a_n}) &=
+	\Delta(\Sigma_n, \ttlparen f(v_1, \ldots, v_n) \ttrparen) ~ \cup ~ \cup_{1 \le i \le n} \Delta(\Sigma_i, a_i), \\
+	&(\Sigma_i, v_i) = \Sigma_{i-1}(a_i), \Sigma_0 = \Sigma, 1 \le i \le n
+\end{split}
+\end{equation*}
 
 \paragraph{Return statement}
 Let $x$ be an expression.
