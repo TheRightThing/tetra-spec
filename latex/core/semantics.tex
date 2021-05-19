@@ -1,0 +1,56 @@
+\chapter{Core}
+
+\section{Values}
+\begin{itemize}
+  \item Redefine values.
+  \item Have to be homomorphic to fundamentals.Values.
+\end{itemize}
+
+\section{Statements}
+
+\section{Expressions}
+
+\section{Datatypes}
+\begin{itemize}
+  \item All type instances have to specified as either const or mut.
+  \item How do types look?
+  \item Differentiate structs with same names and members.
+  \item Values hold a list/mapping of types which implement/inherit this base.
+  \item Have types with an extra ID. Have a tuple of (Values, TypeID), where Values $\equiv$ fundamentals.Values:
+    \begin{itemize}
+      \item Query for: What is the next lower level deriving type.
+      \item Query for: What is the lowest level deriving type.
+    \end{itemize}
+  \item Typecasts:
+    \begin{itemize}
+      \item Conversion casts, e.g.: Int -> Float.
+      \item Model as function, which is called implicitly. Will be predefined for primitive types.
+      \item Lens casts, e.g.: InheritingClass -> BaseClass -> InheritingClass.
+    \end{itemize}
+  \item Inheritance.
+  \item Classes/Structs:
+  \begin{itemize}
+    \item All structs explicitly inherit/implement some base-class.
+    \item Virtual member-functions.
+    \item Override member-functions of explicitly stated base-class.
+    \item Abstract member-functions.
+  \end{itemize}
+\end{itemize}
+
+\section{Functions}
+\begin{itemize}
+  \item All functions have a unique type associated, not the return type.
+  \item Support new expression:
+    \begin{itemize}
+      \item Statements and expressions have to redefined on this level.
+      \item Need to include casts, type-queries, etc.
+    \end{itemize}
+\end{itemize}
+
+\section{Misc}
+\begin{itemize}
+  \item VTables.
+  \item Everything is explicit, there are no implicit conversions.
+  \item New statements for conversion operator.
+  \item Primitives are explicitly defined.
+\end{itemize}
