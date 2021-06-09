@@ -341,3 +341,43 @@ f 420
 ## Notes
 * Separation of declaration and definition:
   * Do not support, rather force rethinking/redesigning...
+
+## Destructuring
+type ErrorInterface a => (MathEnv a)
+
+type State = {
+  StateOfEnv
+  vars :: [strings]
+}
+
+f :: (a, b, c) -> MathEnv
+
+g :: (a MathEnv) -> Void
+g (MathEnv ERROR) -> do ...
+g (MathEnv with NULL in vars) = do ...
+g a = do ...
+
+type NumFrom0To5 = ZERO | ONE | TWO | THREE
+
+[meGo] <- mock go style Xd.
+y :: Number -> Void
+y n = do ...
+y m = do ...
+
+[exhaustive]
+x :: NumFrom0To5 -> Void
+x ONE | TWO = do ...
+
+--------------------  <- exhaustive check needed for input (optional).
+
+// compiler warns dev about missing cases.
+x a = do ...
+x _ = throw
+
+Performance wise "good" implementation with extra information from callerside.
+Performance by hashable types for map-lookups, switching.
+Might be unified with the concept of **GUARDS**.
+
+## Casting and Masks
+* **ABSTRACT CAST** used in abstract classes and used for converting things into **Masks**.
+* Deriving of Masks for classes should be handled implicitly by the compiler.

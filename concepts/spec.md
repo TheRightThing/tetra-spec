@@ -17,6 +17,20 @@
 * **Concept**:
   * Defining (multiple) function signatures for a type.
   * Similar interfaces in Go or Typeclasses in Haskell.
+* **Mask**
+  * See (rmbrt-lang)[https://github.com/RmbRT-lang/std/blob/master/std/io/stream]
+  
+  class Connection {
+    connect() {};
+    disconnect() {};
+  }
+
+  Mask isConnection {
+    connect();
+    disconnect();
+
+    someState s;
+  }
 * Sum and Product types.
 * Structured `enums`.
 
