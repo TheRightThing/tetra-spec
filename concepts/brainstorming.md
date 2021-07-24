@@ -381,3 +381,8 @@ Might be unified with the concept of **GUARDS**.
 ## Casting and Masks
 * **ABSTRACT CAST** used in abstract classes and used for converting things into **Masks**.
 * Deriving of Masks for classes should be handled implicitly by the compiler.
+
+
+## Arrays and maps
+Make arrays and maps as concepts ???
+std::[T]vector (size N) can be converted into T[M] if M<=N. Also allow runtime values for array bounds ???

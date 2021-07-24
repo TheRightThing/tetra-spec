@@ -1,56 +1,80 @@
-\chapter{Core}
-
 \section{Values}
+Let $\Value = \fund\Value \times \Type \times \TypeID$ be the set of all values.
+A value has the form $(v, t, d)$, where $v$ is the actual value, $d$ is the dynamic/deriving type, and $t$ is the static type.
+For non-polymorphic values, $d=t$, and for polymorphic values, $d$ is at least as specific as $t$.
 \begin{itemize}
-  \item Redefine values.
-  \item Have to be homomorphic to fundamentals.Values.
+	\item Query for: What is the next lower level deriving type.
+	\item Query for: What is the lowest level deriving type.
+\end{itemize}
+
+\section{Datatypes}
+
+\subsection{Elementary types}
+Let $\ElemType = \TypeID \times \fund\Type \times FunctionMap \times FieldMap \times P(\TypeID) \times P(\TypeID)$.
+A type has the form $(i, t, fns, fields, b, d)$, where $i$ is the type's unique ID, $b$ is the set of the $\TypeID$s of its base types, and $d$ is the set of the $\TypeID$s of all types deriving from or implementing it.
+Elementary types are formed from a descriptor, which can either be a structure or primitive descriptor:
+$$
+	(t, fields) = \DeclareStruct(\struct{\var{v_1}{T_1}, \dots, \var{v_n}{T_n}}) = (T_1 \times \dots \times T_n, (\cn{v_1}, \dots, \cn{v_n})),
+$$
+$$
+	(t, ()) = \DeclarePrimitive(t)
+$$
+For structured types, the names of the fields and their types are extracted.
+For primitive types, no fields exist, and only the type is needed.
+An elementary type is then constructed from a descriptor $desc = (t, fields)$ as follows:
+$$
+	\DeclareElemType(id, desc, fns, b, d) = (id, t, fns, fields, b, d)
+$$
+
+\subsection{Arrays}
+An array type is defined as $\ArrayType = \Type \times \N$.
+An array has the form $(T, n)$, where $T$ is the element type and $n$ is the size of the array.
+IDEA: arrays are a concept and not definite types, and any indexable type can be converted to an array type if the bounds match.
+
+TODOS for next time:
+\begin{itemize}
+	\item Function maps: define type and how to declare (normal + virtual + abstract).
+	\item Typecasts:
+		\begin{itemize}
+			\item Conversion casts, e.g.: Int $\to$ Float.
+			\item Model as function, which is called implicitly. Will be predefined for primitive types.
+			\item Lens/inheritance casts, e.g.: InheritingClass $\to$ BaseClass $\to$ InheritingClass.
+		\end{itemize}
+	\item Inheritance: define type and how to declare.
+		Structs can only explicitly inherit/implement base-classes.
+	\item References: Semantics and figure out how to make stuff like malloc/free without allowing powerful address manipulation that can create a new valid address from another one, breaking side-effect containment.
+\end{itemize}
+
+\subsection{References}
+TODO: Find out how reference and pointer semantics should work on a fundamental level.
+
+\begin{itemize}
+	\item Classes/Structs:
+	\begin{itemize}
+	\end{itemize}
 \end{itemize}
 
 \section{Statements}
 
 \section{Expressions}
 
-\section{Datatypes}
-\begin{itemize}
-  \item All type instances have to specified as either const or mut.
-  \item How do types look?
-  \item Differentiate structs with same names and members.
-  \item Values hold a list/mapping of types which implement/inherit this base.
-  \item Have types with an extra ID. Have a tuple of (Values, TypeID), where Values $\equiv$ fundamentals.Values:
-    \begin{itemize}
-      \item Query for: What is the next lower level deriving type.
-      \item Query for: What is the lowest level deriving type.
-    \end{itemize}
-  \item Typecasts:
-    \begin{itemize}
-      \item Conversion casts, e.g.: Int -> Float.
-      \item Model as function, which is called implicitly. Will be predefined for primitive types.
-      \item Lens casts, e.g.: InheritingClass -> BaseClass -> InheritingClass.
-    \end{itemize}
-  \item Inheritance.
-  \item Classes/Structs:
-  \begin{itemize}
-    \item All structs explicitly inherit/implement some base-class.
-    \item Virtual member-functions.
-    \item Override member-functions of explicitly stated base-class.
-    \item Abstract member-functions.
-  \end{itemize}
-\end{itemize}
-
 \section{Functions}
 \begin{itemize}
-  \item All functions have a unique type associated, not the return type.
-  \item Support new expression:
-    \begin{itemize}
-      \item Statements and expressions have to redefined on this level.
-      \item Need to include casts, type-queries, etc.
-    \end{itemize}
+	\item All functions have a unique type associated, in addition to their signature type.
+		Type contains stack frame and general info (useful for coroutines, closures).
+	\item Support new expression:
+		\begin{itemize}
+			\item Statements and expressions have to redefined on this level.
+			\item Need to include casts, type-queries, etc.
+		\end{itemize}
 \end{itemize}
 
 \section{Misc}
 \begin{itemize}
-  \item VTables.
-  \item Everything is explicit, there are no implicit conversions.
-  \item New statements for conversion operator.
-  \item Primitives are explicitly defined.
+	\item All type instances have to specified as either const or mut.
+	\item VTables (TypeIDs + class descriptor objects).
+	\item Everything is explicit, there are no implicit conversions.
+	\item Introduce a conversion operator for different conversion kinds of cast (lens/inheritance casts, value conversion casts, \dots).
+	\item Primitives ($\Z$, $\N$, \dots) are explicitly defined.
+	\item When overriding member-functions, the function's base class has to be stated explicitly.
 \end{itemize}
