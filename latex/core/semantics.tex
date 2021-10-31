@@ -31,32 +31,21 @@ An array type is defined as $\ArrayType = \Type \times \N$.
 An array has the form $(T, n)$, where $T$ is the element type and $n$ is the size of the array.
 IDEA: arrays are a concept and not definite types, and any indexable type can be converted to an array type if the bounds match.
 
-TODOS for next time:
-\begin{itemize}
-	\item Function maps: define type and how to declare (normal + virtual + abstract).
-	\item Typecasts:
-		\begin{itemize}
-			\item Conversion casts, e.g.: Int $\to$ Float.
-			\item Model as function, which is called implicitly. Will be predefined for primitive types.
-			\item Lens/inheritance casts, e.g.: InheritingClass $\to$ BaseClass $\to$ InheritingClass.
-		\end{itemize}
-	\item Inheritance: define type and how to declare.
-		Structs can only explicitly inherit/implement base-classes.
-	\item References: Semantics and figure out how to make stuff like malloc/free without allowing powerful address manipulation that can create a new valid address from another one, breaking side-effect containment.
-\end{itemize}
-
-\subsection{References}
-TODO: Find out how reference and pointer semantics should work on a fundamental level.
-
 \begin{itemize}
 	\item Classes/Structs:
-	\begin{itemize}
-	\end{itemize}
 \end{itemize}
 
 \section{Statements}
 
 \section{Expressions}
+\subsection{Typecasts}
+\begin{itemize}
+	\item Conversion casts, e.g.: Int $\to$ Float.
+	\item Determine the type of an expression based on context (outside-in) (Algorithm W).
+	\item Model as function, which is called implicitly. Will be predefined for primitive types.
+	\item Structural conversion casts using tuples: Detect conversion distance properly (sum over all element distances).
+	\item Lens/inheritance casts, e.g.: InheritingClass $\to$ BaseClass $\to$ InheritingClass.
+\end{itemize}
 
 \section{Functions}
 \begin{itemize}
@@ -77,4 +66,19 @@ TODO: Find out how reference and pointer semantics should work on a fundamental 
 	\item Introduce a conversion operator for different conversion kinds of cast (lens/inheritance casts, value conversion casts, \dots).
 	\item Primitives ($\Z$, $\N$, \dots) are explicitly defined.
 	\item When overriding member-functions, the function's base class has to be stated explicitly.
+	\item Use outward-in type inferring for things like references etc. when instantiating a context.
+\end{itemize}
+
+
+\section{Memory management}
+RAM is exposed as a compile-time builtin interface type (user-implementable).
+RAM allows arbitrary read and write access to memory cells (also support read-only RAMs etc.).
+\begin{itemize}
+	\item References are user-defined types but with a native syntax to which meaning is bound by context.
+	\item It is forbidden to get a valid reference to another object from an existing reference.
+	\item (Native memory management): RAM is exposed as continuous byte array.
+	\item There can be multiple RAMs.
+	\item Context-local variables have different address types from RAM variables.
+	\item The type of address a pointer points to is inferred by its possible usages.
+	\item RAM modules and local variables are "reference factories".
 \end{itemize}
